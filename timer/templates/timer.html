@@ -1,0 +1,59 @@
+{% extends "default.html" %}
+
+{% block content %}
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <a href="/timer/">Labels</a>
+        <h1>{{ label.title }}</h1>
+        <a href="#eventPopup" data-icon="plus" data-rel="popup" data-position-to="window" data-transition="fade">New Event</a>
+    </div>
+    <div data-role="header" data-theme="b">
+        <a href="?start={{ previous }}" data-icon="arrow-l" data-iconpos="left">Previous</a>
+        <h1>{{ title|date:"SHORT_DATE_FORMAT" }}</h1>
+        <a href="?start={{ next }} " data-icon="arrow-r" data-iconpos="right">Next</a>
+    </div>
+    <div data-role="navbar">
+        <ul>
+            <li><a href="?view=list">List</a></li>
+            <li><a href="?view=report">Report</a></li>
+        </ul>
+    </div>
+    <div data-role="content">
+        {% block main_content %}
+            <ul data-role="listview" id="eventList" data-filter="true">
+                {% include "event_list.html" %}
+            </ul>
+        {% endblock main_content %}
+    </div> 
+    
+    <div data-role="footer" data-position="fixed" style="text-align:center;">
+        <a href="?start={% now "Ymd" %}&amp;group=day" style="float:left">Today</a>
+        <div data-role="controlgroup" data-type="horizontal">
+            <a href="?start={{ title|date:"Ymd" }}&amp;group=day" data-role="button">Day</a>
+            <a href="?start={{ title|date:"Ymd" }}&amp;group=week" data-role="button">Week</a>
+            <a href="?start={{ title|date:"Ymd" }}&amp;group=month" data-role="button">Month</a>
+        </div>
+    </div>
+
+    <div data-role="popup" id="eventPopup" class="ui-content" data-theme="b">
+        <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+        <form method="post" action="" class="ui-hide-label">
+            {% csrf_token %}
+            <div class="ui-grid-b">
+                <div class="ui-block-a">{{ form.started_at }}</div>
+                <div class="ui-block-c"><input type="text" id="duration"/></div>
+                <div class="ui-block-b">{{ form.finished_at }}</div>
+            </div><!-- /grid-a -->
+            {{ form.duration }}
+            {{ form.labels }}
+            {{ form.notes }}
+            <button type="submit" data-theme="b">Save</button>
+        </form>
+    </div>
+</div>
+
+<div data-role="page" id="event">
+
+</div>
+
+{% endblock content %}

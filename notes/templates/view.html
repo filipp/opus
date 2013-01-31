@@ -1,0 +1,15 @@
+{% extends request.is_ajax|yesno:"blank.html,index.html" %}
+{% load markup %}
+
+{% block content %}
+<div data-role="page">
+    <div data-role="header">
+        <a href="/notes/" data-icon="arrow-l">Notes</a>
+        <h1>{{ note.title }}</h1>
+        <a href="{{ note.get_absolute_url }}edit/">Edit</a>
+    </div>
+    <div data-role="content">   
+        <p>{{ version.content|restructuredtext }}</p>
+    </div>
+</div>
+{% endblock content %}

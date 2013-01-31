@@ -1,0 +1,68 @@
+{% extends "default.html" %}
+
+{% block js %}
+    <script type="text/template" id="startViewTemplate">
+        <input type="text" value="<%= minutes %>" placeholder="M" id="minutes"/>:<input type="text" id="seconds" value="<%= seconds %>"/>
+        <a href="#runningView" data-role="button">Start</a>
+    </script>
+    <script type="text/template" id="runningViewTemplate">
+        <h1><%= minutes_remaining %>:<%= seconds_remaining %></h1>
+        <a href="#" data-role="button">Stop</a>
+    </script>
+    <script type="text/javascript">
+        var Alarm = Backbone.Model.extend({
+            start: function() {
+                var elapsed = 0;
+                var interval = parseInt(this.get('minutes'))*60 + parseInt(this.get('seconds'));
+                window.setInterval(function() {
+                    elapsed += 1;
+                    if(elapsed < interval) {
+                        console.log(interval - elapsed, ' seconds to go');
+                    }
+                }, 1000);
+            },
+            stop: function() {
+
+            },
+            pause: function() {
+
+            }
+        });
+
+        var RunningView = Backbone.View.extend({
+            initialize: function() {
+                this.template = _.template($('#runningViewTemplate').html());
+                this.modal.on('change', this.render);
+            },
+            render: function() {
+                console.log('render!!!');
+                return this;
+            }
+        });
+
+        var AppView = Backbone.View.extend({
+            initialize: function() {
+                var tpl = _.template($('#startViewTemplate').html());
+                alarm = new Alarm({minutes: 0, seconds: 15});
+                $('#startView').append(tpl(alarm.toJSON()));
+                //alarm.start();
+                //$('#startView a').button('refresh');
+                //$('#startView input').textinput('enable');
+            }
+        });
+
+        $(function() {
+            new AppView;
+        });
+
+    </script>
+{% endblock js %}
+
+{% block content %}
+    <div data-role="page">
+        <div data-role="content" id="startView"></div>
+    </div>
+    <div data-role="page">
+        <div data-role="content" id="runningView"></div>
+    </div>
+{% endblock content %}

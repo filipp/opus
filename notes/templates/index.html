@@ -1,0 +1,27 @@
+{% extends request.is_ajax|yesno:"blank.html,default.html" %}
+
+{% block content %}
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <a href="#tagPopup" data-icon="gear" data-rel="popup">Tags</a>
+        <h1>Notes</h1>
+        <a href="/notes/new/" class="ui-btn-right">New</a>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" data-filter="true">
+        {% for n in notes %}
+            <li><a href="{{ n.get_absolute_url }}">{{ n.title }}<p class="ui-li-aside ui-li-desc">{{ n.user.username }} @ {{ n.updated_at|date:"SHORT_DATE_FORMAT" }}</p></a></li>
+        {% endfor %}
+        </ul>
+
+        <div data-role="popup" id="tagPopup">
+            <ul data-role="listview" data-inset="true">
+            {% for t in tags %}
+                <li><a href="/notes/tag/{{ t.pk }}/">{{ t.title }} <span class="ui-li-count">{{ t.note_set.count }}</span></a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

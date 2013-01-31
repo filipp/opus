@@ -1,0 +1,31 @@
+{% extends "timer.html" %}
+
+{% block content %}
+<div data-role="page">
+    <div data-role="header">
+        <h1>Labels</h1>
+        <a href="#labelPopup" data-icon="plus" data-rel="popup" data-position-to="window">Add</a>
+    </div>
+     <div data-role="content">
+        <ul data-role="listview" id="labelList">
+        {% include "label_list.html" %}
+        </ul>
+     </div>
+     <div data-role="popup" id="labelPopup" class="ui-content">
+        <form method="post" action="/timer/labels/new/">
+            {% csrf_token %}
+            <input type="text" name="title"/>
+            <select name="color">
+                <option>Red</option>
+                <option>Orange</option>
+                <option>Yellow</option>
+                <option>Green</option>
+                <option>Blue</option>
+                <option>Purple</option>
+                <option>Brown</option>
+            </select>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,69 @@
+{% load staticfiles %}
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>opus v0.01</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript">
+        function getDate(field) {
+            // 2013-01-30 08:36:48
+            var splitRex = /^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/;
+            var s = $(field).val().match(splitRex);
+            return new Date(s[1], parseInt(s[2])-1, s[3], s[4], s[5], s[6], 0);
+        }
+
+        function toDateTime(date) {
+            function pad(n){return n<10 ? '0'+n : n}
+            return date.getFullYear()+'-'
+                +pad(date.getMonth()+1)+'-'
+                +pad(date.getDate())+' '
+                +pad(date.getHours())+':'
+                +pad(date.getMinutes())+':'
+                +pad(date.getSeconds());
+        }
+
+        $(function(){
+            $('#duration').blur(function(){
+                if($('#id_started_at').val() == '') return;
+
+                console.log('Calculate finished_at!');
+
+                started_at = getDate('#id_started_at');
+                var d = $(this).val().split(':');
+                // H:M:S
+                var seconds = 0;
+                if (d[0]) seconds += parseInt(d[0]*3600);
+                if (d[1]) seconds += parseInt(d[1]*60);
+                if (d[2]) seconds += parseInt(d[2]);
+                finished_at = new Date(started_at.getTime() + (seconds*1000));
+                $('#id_finished_at').val(toDateTime(finished_at));
+                
+                $('#id_duration').val(seconds);
+
+            });
+
+            $('#id_finished_at').blur(function(){
+                if($('#id_duration').val() == '') return;
+
+                console.log('Calculate duration...');
+                finished_at = getDate('#id_finished_at');
+                started_at = getDate('#id_started_at');
+                seconds = (finished_at - started_at)/1000;
+                $('#id_duration').val(seconds);
+
+                hours = seconds/3600;
+
+                $('#duration').val(hours);
+            });
+        });
+    </script>
+</head>
+    <body id="app">
+        {% block content %}
+            
+        {% endblock content %}
+    </body>
+</html>

@@ -1,0 +1,31 @@
+{% extends request.is_ajax|yesno:"blank.html,index.html" %}
+
+{% block content %}
+<div data-role="page">
+    <div data-role="header">
+        <a href="/notes/" data-icon="arrow-l">Notes</a>
+        <h1>New Note</h1>
+        <a href="/notes/" id="done">Done</a>
+    </div>
+    <div data-role="content">
+        <form action="" method="post" id="noteForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" data-theme="b">Save</button>
+            {% if form.is_bound %}
+                <a href="delete/" data-role="button">Delete</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#id_title').focus();
+    });
+    $('#done').click(function(e){
+        e.preventDefault();
+        $('#noteForm').submit();
+    });
+</script>
+{% endblock content %}

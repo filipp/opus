@@ -1,0 +1,5 @@
+{% for i in events %}
+    <li>
+        <a href="{{ i.get_absolute_url }}">{{ i.hours }}h @ {{ i.started_at|date:"SHORT_DATE_FORMAT" }} {{ i.started_at|date:"H:i" }} {{ i.notes }}</a>
+    </li>
+{% endfor %}

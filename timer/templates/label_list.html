@@ -1,0 +1,3 @@
+{% for l in labels %}
+    <li><a href="/timer/label/1/events/?view=list">{{ l.title }}<span class="ui-li-count">{{ l.event_set.count }}</span></a></a></li>
+{% endfor %}
