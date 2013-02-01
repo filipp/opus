@@ -14,7 +14,7 @@ class Tag(models.Model):
 class Note(models.Model):
     user = models.ForeignKey(User)
     shared = models.BooleanField(default=True)
-    title = models.CharField(max_length=140, null=True)
+    title = models.CharField(max_length=140, null=True, default=u'New Note')
     tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     def get_date(self):
@@ -51,11 +51,13 @@ class Attachment(models.Model):
     content = models.FileField(upload_to='uploads')
     note = models.ForeignKey(Note)
 
+    def get_name(self):
+        import os.path
+        return os.path.basename(self.content.name)
+
 @receiver(post_save, sender=Version)
 def version_saved(sender, instance, created, **kwargs):
-    
     tags = re.findall('#(\w+)', instance.content)
-
     for t in tags:
         tag = Tag.objects.get_or_create(title=t)[0]
         instance.note.tags.add(tag)

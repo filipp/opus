@@ -6,10 +6,18 @@
     <div data-role="header">
         <a href="/notes/" data-icon="arrow-l">Notes</a>
         <h1>{{ note.title }}</h1>
-        <a href="{{ note.get_absolute_url }}edit/">Edit</a>
+        <a href="{{ note.get_absolute_url }}edit/" data-ajax="false">Edit</a>
     </div>
     <div data-role="content">   
         <p>{{ version.content|restructuredtext }}</p>
+        <ul data-role="listview" data-inset="true">
+        {% for a in note.attachment_set.all %}
+            <li><a href="/notes/{{ note.id }}/file/{{ a.id }}/">{{ a.get_name }}<span class="ui-li-aside ui-li-desc">{{ a.content.size|filesizeformat }}</span></a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b">
+        <a href="delete" data-icon="delete" data-role="button">Delete</a>
     </div>
 </div>
 {% endblock content %}

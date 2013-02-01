@@ -3,14 +3,19 @@
 {% block content %}
 <div data-role="page">
     <div data-role="header">
-        <a href="/notes/" data-icon="arrow-l">Notes</a>
-        <h1>New Note</h1>
-        <a href="/notes/" id="done">Done</a>
+        <a href="/notes/" data-icon="arrow-l" data-ajax="false">Notes</a>
+        <h1>{{ note.title }}</h1>
+        <a href="#" id="done">Done</a>
     </div>
     <div data-role="content">
-        <form action="" method="post" id="noteForm" enctype="multipart/form-data">
+        <form action="" method="post" id="noteForm" enctype="multipart/form-data" data-ajax="false">
             {% csrf_token %}
             {{ form }}
+            <ul data-role="listview" data-inset="true">
+            {% for a in note.attachment_set.all %}
+                <li><a href="/notes/{{ note.id }}/files/{{ a.id }}/delete/">{{ a.get_name }}</a></li>
+            {% endfor %}
+            </ul>
             <button type="submit" data-theme="b">Save</button>
             {% if form.is_bound %}
                 <a href="delete/" data-role="button">Delete</a>

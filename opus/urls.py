@@ -25,8 +25,9 @@ urlpatterns = patterns('',
 
     url(r'^notes/$', 'notes.views.index'),
     url(r'^notes/tag/(\d+)/$', 'notes.views.index'),
-    
+
     url(r'^notes/(\d+)/$', 'notes.views.view'),
     url(r'^notes/new/$', 'notes.views.edit'),
     url(r'^notes/(\d+)/edit/$', 'notes.views.edit'),
+    url(r'^notes/(\d+)/file/(\d+)/$', 'notes.views.view_file'),
 )
